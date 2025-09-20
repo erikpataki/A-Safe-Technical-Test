@@ -1,5 +1,6 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
+import CustomCursor from './components/CustomCursor/CustomCursor';
 
 function App() {
   const [joke, setJoke] = useState(null);
@@ -27,12 +28,15 @@ function App() {
   }, []);
 
   return (
-    <div className='joke-container-parent'>
+    <>
+      <CustomCursor/>
+      <div className='joke-container-parent'>
       <div className='joke-container'>
         <h2 className='joke-setup'>{joke ? joke.setup : ' '}</h2>
         <p className='joke-punchline'>{joke ? joke.punchline : ' '}</p>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
 

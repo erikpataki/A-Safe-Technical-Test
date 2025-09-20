@@ -1,5 +1,6 @@
 body {
   background-color: #0D1F22;
+  cursor: none;
 }
 
 .joke-container-parent {
@@ -20,14 +21,12 @@ body {
   filter: drop-shadow(0 0 2rem #fffffa71);
   text-align: center;
   margin-top: 50px;
-  /* use relative positioning so we can absolutely position the children */
   position: relative;
   padding: 1rem;
   box-sizing: border-box;
 }
 
 .joke-setup {
-  /* center exactly in the middle of the container */
   position: absolute;
   top: 50%;
   left: 50%;
@@ -41,7 +40,7 @@ body {
 
 .joke-punchline {
   position: absolute;
-  top: calc(50% + 2.25rem); /* adjust this value to control spacing */
+  top: calc(50% + 2.25rem);
   left: 50%;
   transform: translateX(-50%);
   margin: 0;
