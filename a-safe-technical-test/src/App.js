@@ -1,28 +1,58 @@
 import './App.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import CustomCursor from './components/CustomCursor/CustomCursor';
 
 function App() {
   const [joke, setJoke] = useState(null);
 
-  const fetchJoke = async () => {
+  // history of jokes and index for prev/next navigation
+  const historyRef = useRef([]);
+  const indexRef = useRef(-1);
+
+  const fetchJoke = async (push = true) => {
       const res = await fetch('http://localhost:5000/api/jokes/random');
       const data = await res.json();
       setJoke(data);
+
+      if (push) {
+        // trim forward history if we've gone back
+        historyRef.current = historyRef.current.slice(0, indexRef.current + 1);
+        historyRef.current.push(data);
+        indexRef.current = historyRef.current.length - 1;
+      }
   };
 
-  //fetches joke on load
+  //fetches joke on load and adds to history
   useEffect(() => {
-    fetchJoke();
+    fetchJoke(true);
   }, []);
 
-  //clicking handler
-  const handleClick = () => {
-  fetchJoke();
+  // navigation helpers
+  const goPrevious = () => {
+    if (indexRef.current > 0) {
+      indexRef.current -= 1;
+      setJoke(historyRef.current[indexRef.current]);
+    }
   };
 
+  const goNext = () => {
+    if (indexRef.current < historyRef.current.length - 1) {
+      indexRef.current += 1;
+      setJoke(historyRef.current[indexRef.current]);
+    } else {
+      // fetch new joke and push into history
+      fetchJoke(true);
+    }
+  };
+
+  // clicking left half = previous, right half = next
   useEffect(() => {
-    const onDocClick = () => handleClick();
+    const onDocClick = (e) => {
+      const x = e.clientX;
+      const half = window.innerWidth / 2;
+      if (x < half) goPrevious();
+      else goNext();
+    };
     document.addEventListener('click', onDocClick);
     return () => document.removeEventListener('click', onDocClick);
   }, []);
