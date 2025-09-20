@@ -1,16 +1,24 @@
 import './App.css';
 import React, { useState, useEffect, useRef } from 'react';
 import CustomCursor from './components/CustomCursor/CustomCursor';
+import CategorySelector from './components/CategorySelector/CategorySelector';
 
 function App() {
   const [joke, setJoke] = useState(null);
+  const [types, setTypes] = useState([]); // options from backend
+  const [selectedTypes, setSelectedTypes] = useState([]);
 
   // history of jokes and index for prev/next navigation
   const historyRef = useRef([]);
   const indexRef = useRef(-1);
 
   const fetchJoke = async (push = true) => {
-      const res = await fetch('http://localhost:5000/api/jokes/random');
+    const qs = selectedTypes.length > 0 ? `?types=${encodeURIComponent(selectedTypes.join(','))}` : '';
+      const res = await fetch(`http://localhost:5000/api/jokes/random${qs}`);
+      if (!res.ok) {
+        setJoke(null);
+        return;
+      }
       const data = await res.json();
       setJoke(data);
 
@@ -22,10 +30,24 @@ function App() {
       }
   };
 
-  //fetches joke on load and adds to history
+  // load categories and first joke on start
   useEffect(() => {
-    fetchJoke(true);
+    const load = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/types');
+        if (res.ok) {
+          const list = await res.json();
+          setTypes(list);
+        }
+      } catch {}
+      fetchJoke(true);
+    };
+    load();
   }, []);
+
+  useEffect(() => {
+    historyRef.current = historyRef.current.slice(0, indexRef.current + 1);
+  }, [selectedTypes]);
 
   // navigation helpers
   const goPrevious = () => {
@@ -48,6 +70,11 @@ function App() {
   // clicking left half = previous, right half = next
   useEffect(() => {
     const onDocClick = (e) => {
+      // ignore clicks on the category selector to allow interaction
+      const selEl = document.querySelector('.category-selector');
+      if (selEl && selEl.contains(e.target)) return;
+      if (document.documentElement.dataset.dropdownOpen === '1') return;
+
       const x = e.clientX;
       const half = window.innerWidth / 2;
       if (x < half) goPrevious();
@@ -55,11 +82,16 @@ function App() {
     };
     document.addEventListener('click', onDocClick);
     return () => document.removeEventListener('click', onDocClick);
-  }, []);
+  }, [selectedTypes]);
 
   return (
     <>
       <CustomCursor/>
+      <CategorySelector
+        options={types}
+        selected={selectedTypes}
+        onChange={setSelectedTypes}
+      />
       <div className='joke-container-parent'>
       <div className='joke-container'>
         <h2 className='joke-setup'>{joke ? joke.setup : ' '}</h2>

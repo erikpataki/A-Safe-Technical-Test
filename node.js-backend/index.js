@@ -23,10 +23,35 @@ db.run(`CREATE TABLE IF NOT EXISTS jokes (
 )`);
 
 app.get('/api/jokes/random', (req, res) => {
-  db.get('SELECT joke_id as id, type, setup, punchline FROM jokes ORDER BY RANDOM() LIMIT 1', (err, row) => {
+  // Optional filter via query string: /api/jokes/random?types=general,programming
+  const typesParam = req.query.types;
+  let sql = 'SELECT joke_id as id, type, setup, punchline FROM jokes';
+  let params = [];
+  if (typeof typesParam === 'string') {
+    const types = typesParam
+      .split(',')
+      .map(s => s.trim())
+      .filter(Boolean);
+    if (types.length > 0) {
+      const placeholders = types.map(() => '?').join(',');
+      sql += ` WHERE type IN (${placeholders})`;
+      params = types;
+    }
+  }
+  sql += ' ORDER BY RANDOM() LIMIT 1';
+
+  db.get(sql, params, (err, row) => {
     if (err) return res.status(500).json({ error: err.message });
-    if (!row) return res.status(404).json({ error: 'No jokes found. Did you seed the DB?' });
+    if (!row) return res.status(404).json({ error: 'No jokes found for the given filter.' });
     res.json(row);
+  });
+});
+
+app.get('/api/types', (req, res) => {
+  db.all('SELECT DISTINCT type FROM jokes WHERE type IS NOT NULL ORDER BY type', (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+    const types = rows.map(r => r.type);
+    res.json(types);
   });
 });
 
