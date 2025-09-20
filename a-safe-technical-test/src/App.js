@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
 
 function App() {
+  const [joke, setJoke] = useState(null);
+
+  const fetchJoke = async () => {
+      const res = await fetch('http://localhost:5000/api/jokes/random');
+      const data = await res.json();
+      setJoke(data);
+  };
+
+  useEffect(() => {
+    fetchJoke();
+  }, []);
+
+  const handleClick = () => {
+  fetchJoke();
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+    <div>
+      <div onClick={handleClick}>
+        <h2>{joke ? joke.setup : ' '}</h2>
+        <p>{joke ? joke.punchline : ' '}</p>
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Click
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      </div>
     </div>
   );
 }

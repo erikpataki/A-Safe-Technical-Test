@@ -4,7 +4,9 @@
   "description": "Fetches random joke from database for frontend",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "seed": "node import_jokes.js"
   },
   "repository": {
     "type": "git",
