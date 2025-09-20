@@ -1,0 +1,114 @@
+.category-selector {
+	position: fixed;
+	left: 50%;
+	top: 2rem;
+	transform: translateX(-50%);
+	z-index: 1000;
+	pointer-events: auto;
+	font-family: "Playfair Display", "Inter";
+    font-size: 1rem;
+    text-transform: capitalize;
+    filter: drop-shadow(0 0 1.5rem #fffffa59);
+}
+
+.category-selector .cat-btn {
+	cursor: pointer;
+	background: #fffffa;
+	color: #0d1f22;
+	border: none;
+	border-radius: 8px;
+	padding: 8px 12px;
+	min-width: 180px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	/* box-shadow: 0 4px 16px rgba(255,255,250,0.15); */
+    font-family: "Playfair Display", "Inter";
+    font-size: 1rem;
+    transition: transform 0.3s ease, border-radius 0.3s ease;
+    cursor: pointer;
+}
+
+.category-selector .triangle {
+    scale: 1.8;
+}
+
+.category-selector .dropdown {
+	background: #fffffa;
+	color: #0d1f22;
+	border: none;
+	border-radius: 8px;
+	/* box-shadow: 0 12px 24px rgba(0,0,0,0.25); */
+	padding: 6px 8px;
+	transition: transform 0.3s ease, opacity 0.25s ease, border-radius 0.3s ease;
+}
+
+.category-selector .dropdown ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	max-height: 40vh;
+	overflow: auto;
+}
+
+.category-selector .dropdown li {
+	padding: 6px 4px;
+}
+
+.category-selector label {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	cursor: pointer;
+}
+
+.category-selector input[type="checkbox"] {
+	accent-color: #0d1f22;
+}
+
+.category-selector .empty {
+	opacity: 0.7;
+	padding: 8px 4px;
+}
+
+/* remove shared corners when open — support both parent and dropdown open */
+.category-selector.open .cat-btn,
+.category-selector .cat-btn.open {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.category-selector.open .dropdown,
+.category-selector .dropdown.open {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.category-selector .dropdown {
+	transform-origin: top center;
+	transform: scaleY(0.8);
+	opacity: 0;
+	visibility: hidden;
+	transition: transform 0.3s ease, opacity 0.25s ease, visibility 0.3s ease;
+}
+
+.category-selector .dropdown.open {
+	transform: scaleY(1);
+	opacity: 1;
+	visibility: visible;
+    cursor: default;
+}
+
+input[type="checkbox"] {
+    cursor: pointer;
+}
+
+.category-selector .triangle {
+	transition: transform 0.3s ease;
+    transform: rotate(270deg);
+}
+
+.category-selector.open .triangle {
+	transform: rotate(360deg);
+}
