@@ -1,3 +1,4 @@
+import './App.css';
 import React, { useState, useEffect } from 'react';
 
 function App() {
@@ -9,22 +10,27 @@ function App() {
       setJoke(data);
   };
 
+  //fetches joke on load
   useEffect(() => {
     fetchJoke();
   }, []);
 
+  //clicking handler
   const handleClick = () => {
   fetchJoke();
   };
 
+  useEffect(() => {
+    const onDocClick = () => handleClick();
+    document.addEventListener('click', onDocClick);
+    return () => document.removeEventListener('click', onDocClick);
+  }, []);
+
   return (
-    <div>
-      <div onClick={handleClick}>
-        <h2>{joke ? joke.setup : ' '}</h2>
-        <p>{joke ? joke.punchline : ' '}</p>
-        <p>
-          Click
-        </p>
+    <div className='joke-container-parent'>
+      <div className='joke-container'>
+        <h2 className='joke-setup'>{joke ? joke.setup : ' '}</h2>
+        <p className='joke-punchline'>{joke ? joke.punchline : ' '}</p>
       </div>
     </div>
   );

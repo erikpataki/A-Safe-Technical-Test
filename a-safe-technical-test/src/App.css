@@ -1,38 +1,53 @@
-.App {
-  text-align: center;
+body {
+  background-color: #0D1F22;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.joke-container-parent {
+  height: 100vh;
+  width: 100vw;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  font-family: "Playfair Display", "Inter", sans-serif;
+  user-select: none;
 }
 
-.App-link {
-  color: #61dafb;
+.joke-container {
+  width: 37rem;
+  height: 17rem;
+  border-radius: 1rem;
+  background-color: #FFFFFA;
+  filter: drop-shadow(0 0 2rem #fffffa71);
+  text-align: center;
+  margin-top: 50px;
+  /* use relative positioning so we can absolutely position the children */
+  position: relative;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.joke-setup {
+  /* center exactly in the middle of the container */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  font-weight: 300;
+  font-size: 1.5rem;
+  text-align: center;
+  width: calc(100% - 2.5rem);
+}
+
+.joke-punchline {
+  position: absolute;
+  top: calc(50% + 2.25rem); /* adjust this value to control spacing */
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  font-weight: 300;
+  font-size: 1.1rem;
+  font-style: italic;
+  width: calc(100% - 2.5rem);
+  text-align: center;
 }
