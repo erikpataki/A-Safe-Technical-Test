@@ -5,8 +5,9 @@ import CategorySelector from './components/CategorySelector/CategorySelector';
 
 function App() {
   const [joke, setJoke] = useState(null);
-  const [types, setTypes] = useState([]); // options from backend
+  const [types, setTypes] = useState([]);
   const [selectedTypes, setSelectedTypes] = useState([]);
+  const [revealed, setRevealed] = useState(false);
 
   // history of jokes and index for prev/next navigation
   const historyRef = useRef([]);
@@ -20,6 +21,7 @@ function App() {
         return;
       }
       const data = await res.json();
+      setRevealed(false);
       setJoke(data);
 
       if (push) {
@@ -30,7 +32,7 @@ function App() {
       }
   };
 
-  // load categories and first joke on start
+  // load categories on start. first click fetches first joke
   useEffect(() => {
     const load = async () => {
       try {
@@ -40,7 +42,6 @@ function App() {
           setTypes(list);
         }
       } catch {}
-      fetchJoke(true);
     };
     load();
   }, []);
@@ -53,6 +54,7 @@ function App() {
   const goPrevious = () => {
     if (indexRef.current > 0) {
       indexRef.current -= 1;
+      setRevealed(false);
       setJoke(historyRef.current[indexRef.current]);
     }
   };
@@ -60,6 +62,7 @@ function App() {
   const goNext = () => {
     if (indexRef.current < historyRef.current.length - 1) {
       indexRef.current += 1;
+      setRevealed(false);
       setJoke(historyRef.current[indexRef.current]);
     } else {
       // fetch new joke and push into history
@@ -77,26 +80,38 @@ function App() {
 
       const x = e.clientX;
       const half = window.innerWidth / 2;
-      if (x < half) goPrevious();
-      else goNext();
+      if (x < half) {
+        goPrevious();
+      } else {
+        if (!joke) {
+          fetchJoke(true);
+        } else if (!revealed) {
+          setRevealed(true);
+        } else {
+          goNext();
+        }
+      }
     };
     document.addEventListener('click', onDocClick);
     return () => document.removeEventListener('click', onDocClick);
-  }, [selectedTypes]);
+  }, [selectedTypes, revealed, joke]);
 
   return (
     <>
-      <CustomCursor/>
+      <CustomCursor
+        size={50}
+        smooth={0.2}
+      />
       <CategorySelector
         options={types}
         selected={selectedTypes}
         onChange={setSelectedTypes}
       />
       <div className='joke-container-parent'>
-      <div className='joke-container'>
-        <h2 className='joke-setup'>{joke ? joke.setup : ' '}</h2>
-        <p className='joke-punchline'>{joke ? joke.punchline : ' '}</p>
-      </div>
+        <div className='joke-container'>
+          <h2 className='joke-setup'>{joke ? joke.setup : ' '}</h2>
+          <p className={`joke-punchline ${revealed ? 'revealed' : ''}`}>{revealed && joke ? joke.punchline : ' '}</p>
+        </div>
       </div>
     </>
   );

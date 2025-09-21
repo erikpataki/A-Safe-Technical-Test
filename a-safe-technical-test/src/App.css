@@ -23,6 +23,7 @@ body {
   position: relative;
   padding: 1rem;
   box-sizing: border-box;
+  filter: drop-shadow(0 0 2rem #fffffa79);
 }
 
 .joke-setup {
@@ -48,4 +49,10 @@ body {
   font-style: italic;
   width: calc(100% - 2.5rem);
   text-align: center;
+  opacity: 0;
+  transition: opacity 260ms ease;
+}
+
+.joke-punchline.revealed {
+  opacity: 1;
 }
