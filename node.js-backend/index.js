@@ -23,7 +23,6 @@ db.run(`CREATE TABLE IF NOT EXISTS jokes (
 )`);
 
 app.get('/api/jokes/random', (req, res) => {
-  // Optional filter via query string: /api/jokes/random?types=general,programming
   const typesParam = req.query.types;
   let sql = 'SELECT joke_id as id, type, setup, punchline FROM jokes';
   let params = [];
@@ -52,6 +51,14 @@ app.get('/api/types', (req, res) => {
     if (err) return res.status(500).json({ error: err.message });
     const types = rows.map(r => r.type);
     res.json(types);
+  });
+});
+
+// Return types with counts
+app.get('/api/types/stats', (req, res) => {
+  db.all('SELECT type, COUNT(*) as count FROM jokes WHERE type IS NOT NULL GROUP BY type ORDER BY type', (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(rows);
   });
 });
 

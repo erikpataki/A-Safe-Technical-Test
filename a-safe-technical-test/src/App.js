@@ -36,10 +36,22 @@ function App() {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/types');
-        if (res.ok) {
-          const list = await res.json();
-          setTypes(list);
+        // Prefer stats (type + count). Fallback to plain list if stats not available.
+        const statsRes = await fetch('http://localhost:5000/api/types/stats');
+        if (statsRes.ok) {
+          const rows = await statsRes.json();
+          // Sort by most jokes first. if same then alphabetically
+          rows.sort((a, b) => {
+            const byCount = (b.count ?? 0) - (a.count ?? 0);
+            return byCount !== 0 ? byCount : String(a.type).localeCompare(String(b.type));
+          });
+          setTypes(rows);
+          return;
+        }
+        const listRes = await fetch('http://localhost:5000/api/types');
+        if (listRes.ok) {
+          const list = await listRes.json();
+          setTypes(list.map((t) => ({ type: t, count: undefined })));
         }
       } catch {}
     };

@@ -54,7 +54,9 @@ export default function CategorySelector({ options = [], selected = [], onChange
           <div className="empty">No categories</div>
         ) : (
           <ul>
-            {options.map((type) => {
+            {options.map((opt) => {
+              const type = typeof opt === 'string' ? opt : opt.type;
+              const count = typeof opt === 'string' ? undefined : opt.count;
               const id = `cat-${type}`;
               const checked = selected.includes(type);
               return (
@@ -67,7 +69,7 @@ export default function CategorySelector({ options = [], selected = [], onChange
                       onChange={(e) => onItemChange(type, e.target.checked)}
                       onClick={stop}
                     />
-                    <span className="lbl">{type}</span>
+                    <span className="lbl">{count !== undefined ? `${type} (${count})` : type}</span>
                   </label>
                 </li>
               );

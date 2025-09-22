@@ -1,4 +1,4 @@
-# A‑Safe Technical Test — Jokes App
+# A‑Safe Technical Test - Jokes App
 
 Full‑stack app to browse random jokes with category filtering, history navigation, and a custom cursor.
 
@@ -45,6 +45,8 @@ npm start
   - Returns distinct joke types (strings), ordered.
 - GET /api/jokes/random?types=type1,type2
   - Returns one random joke filtered by optional CSV list of types.
+- GET /api/types/stats
+  - Returns types + amount of jokes of that type.
 
 Example:
 ```
