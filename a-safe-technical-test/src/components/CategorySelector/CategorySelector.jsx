@@ -62,6 +62,7 @@ export default function CategorySelector({ options = [], selected = [], onChange
               return (
                 <li key={type}>
                   <label htmlFor={id}>
+                    <span className="lbl">{count !== undefined ? `${type} (${count})` : type}</span>
                     <input
                       id={id}
                       type="checkbox"
@@ -69,7 +70,6 @@ export default function CategorySelector({ options = [], selected = [], onChange
                       onChange={(e) => onItemChange(type, e.target.checked)}
                       onClick={stop}
                     />
-                    <span className="lbl">{count !== undefined ? `${type} (${count})` : type}</span>
                   </label>
                 </li>
               );

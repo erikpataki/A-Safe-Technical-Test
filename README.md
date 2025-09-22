@@ -1,6 +1,28 @@
 # A‑Safe Technical Test - Jokes App
-
 Full‑stack app to browse random jokes with category filtering, history navigation, and a custom cursor.
+
+## Quick start
+Open two terminals.
+
+Terminal 1 - API:
+```powershell
+cd .\node.js-backend
+npm install
+npm start
+```
+
+Terminal 2 - Web:
+```powershell
+cd .\a-safe-technical-test
+npm install
+npm start
+```
+
+- API: http://localhost:5000
+- App: http://localhost:3000
+
+## Prerequisites
+- Node.js 18+ and npm
 
 ## Repo layout
 - node.js-backend — Node.js + SQLite API
@@ -14,31 +36,6 @@ Full‑stack app to browse random jokes with category filtering, history navigat
   - Left half = previous joke
   - Right half = next joke or reveal punchline
 - Custom cursor
-
-## Prerequisites
-- Node.js 18+ and npm
-
-## Quick start
-
-Open two terminals.
-
-Terminal 1 - API:
-```powershell
-cd .\node.js-backend
-npm install
-npm start
-# (optional) seed once: npm run seed
-```
-
-Terminal 2 - Web:
-```powershell
-cd .\a-safe-technical-test
-npm install
-npm start
-```
-
-- API: http://localhost:5000
-- App: http://localhost:3000
 
 ## API
 - GET /api/types
@@ -62,14 +59,9 @@ GET http://localhost:5000/api/jokes/random?types=general,programming
 - Click left half: go to previous joke in history.
 - Category changes trim forward history but keep the current joke shown.
 
-## Configuration
-- Backend port: 5000 (update in node.js-backend/index.js if needed)
-- Frontend expects backend at http://localhost:5000
-
 ## Data import (if needed)
 1. Download raw file from https://github.com/15Dkatz/official_joke_api/blob/master/jokes/index.json
 2. Copy into `.\node.js-backend` folder
-
 ```powershell
 cd .\node.js-backend
 node .\import_jokes.js
@@ -79,6 +71,3 @@ node .\import_jokes.js
 - CORS/errors: ensure backend is running on 5000 before starting the frontend.
 - Empty results after filtering: broaden selection or clear filters.
 - Custom cursor image: change size via the size prop on CustomCursor in `App.js`.
-
-## Credits
-- Jokes dataset: https://github.com/15Dkatz/official_joke_api

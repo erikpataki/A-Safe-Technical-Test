@@ -92,8 +92,20 @@ function App() {
 
       const x = e.clientX;
       const half = window.innerWidth / 2;
+      const hasBack = indexRef.current > 0;
       if (x < half) {
-        goPrevious();
+        if (hasBack) {
+          goPrevious();
+        } else {
+          // Behave like forward until back history exists
+          if (!joke) {
+            fetchJoke(true);
+          } else if (!revealed) {
+            setRevealed(true);
+          } else {
+            goNext();
+          }
+        }
       } else {
         if (!joke) {
           fetchJoke(true);
@@ -113,6 +125,7 @@ function App() {
       <CustomCursor
         size={50}
         smooth={0.2}
+        hasBack={indexRef.current > 0}
       />
       <CategorySelector
         options={types}
@@ -120,7 +133,10 @@ function App() {
         onChange={setSelectedTypes}
       />
       <div className='joke-container-parent'>
-        <div className='joke-container'>
+        {!joke && (
+          <div className="first-hint">Click anywhere for the first joke</div>
+        )}
+        <div className={`joke-container ${!joke ? 'hidden-initial' : ''}`}>
           <h2 className='joke-setup'>{joke ? joke.setup : ' '}</h2>
           <p className={`joke-punchline ${revealed ? 'revealed' : ''}`}>{revealed && joke ? joke.punchline : ' '}</p>
         </div>

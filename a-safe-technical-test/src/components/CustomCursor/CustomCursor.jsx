@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import cursorImgBG from '../../assets/cursor - just bg.svg';
 import cursorImgArrow from '../../assets/cursor - just arrow - new.svg';
 
-export default function CustomCursor({ size = 50, smooth = 0.15 }) {
+export default function CustomCursor({ size = 50, smooth = 0.15, hasBack = false }) {
   const target = useRef({ x: -100, y: -100 });
   const current = useRef({ x: -100, y: -100 });
   const [renderPos, setRenderPos] = useState({ x: -100, y: -100 });
@@ -17,8 +17,8 @@ export default function CustomCursor({ size = 50, smooth = 0.15 }) {
     const onMove = (e) => {
       target.current.x = e.clientX;
       target.current.y = e.clientY;
-      // set left/right state for flipping arrow
-      setIsLeft(e.clientX < window.innerWidth / 2);
+  // set left/right state for flipping arrow
+  setIsLeft(e.clientX < window.innerWidth / 2);
       if (firstMove.current) {
         firstMove.current = false;
         current.current.x = e.clientX;
@@ -61,8 +61,9 @@ export default function CustomCursor({ size = 50, smooth = 0.15 }) {
     opacity: visible ? 1 : 0,
   };
 
+  const flipLeft = hasBack && isLeft;
   return (
-    <div className={`custom-cursor ${isLeft ? 'on-left' : ''}`} style={style}>
+    <div className={`custom-cursor ${flipLeft ? 'on-left' : ''}`} style={style}>
       <div className="cursor-inner">
         <img className="cursor-bg" src={cursorImgBG}/>
         <img className="cursor-arrow" src={cursorImgArrow}/>
