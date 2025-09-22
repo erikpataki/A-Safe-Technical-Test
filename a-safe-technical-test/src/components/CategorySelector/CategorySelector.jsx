@@ -47,8 +47,6 @@ export default function CategorySelector({ options = [], selected = [], onChange
         {selected.length > 0 ? `${selected.length} selected` : 'All categories'}
         <span className={`triangle ${open ? 'rot' : ''}`} aria-hidden>▾</span>
       </button>
-
-      {/* Keep mounted for animation */}
       <div className={`dropdown ${open ? 'open' : ''}`} role="listbox" aria-hidden={!open}>
         {options.length === 0 ? (
           <div className="empty">No categories</div>

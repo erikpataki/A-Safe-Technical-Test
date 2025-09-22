@@ -1,8 +1,7 @@
 import './CustomCursor.css'
 import React, { useEffect, useRef, useState } from 'react';
-// import cursorImg from '../../assets/cursor.svg';
 import cursorImgBG from '../../assets/cursor - just bg.svg';
-import cursorImgArrow from '../../assets/cursor - just arrow - new.svg';
+import cursorImgArrow from '../../assets/cursor - just arrow.svg';
 
 export default function CustomCursor({ size = 50, smooth = 0.15, hasBack = false }) {
   const target = useRef({ x: -100, y: -100 });
